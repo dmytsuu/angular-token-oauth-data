@@ -1,3 +1,4 @@
+import { __values, __read } from 'tslib';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isPlatformServer } from '@angular/common';
 import { Observable, fromEvent, interval, BehaviorSubject } from 'rxjs';
@@ -280,19 +281,19 @@ var AngularTokenService = /** @class */ (function () {
     };
     /**
      * @param {?} oAuthType
-     * @param {?=} registrationToken
+     * @param {?=} additionalData
      * @param {?=} inAppBrowser
      * @param {?=} platform
      * @return {?}
      */
     AngularTokenService.prototype.signInOAuth = /**
      * @param {?} oAuthType
-     * @param {?=} registrationToken
+     * @param {?=} additionalData
      * @param {?=} inAppBrowser
      * @param {?=} platform
      * @return {?}
      */
-    function (oAuthType, registrationToken, inAppBrowser, platform) {
+    function (oAuthType, additionalData, inAppBrowser, platform) {
         var _this = this;
         /** @type {?} */
         var oAuthPath = this.getOAuthPath(oAuthType);
@@ -301,7 +302,7 @@ var AngularTokenService = /** @class */ (function () {
         /** @type {?} */
         var oAuthWindowType = this.options.oAuthWindowType;
         /** @type {?} */
-        var authUrl = this.getOAuthUrl(oAuthPath, callbackUrl, oAuthWindowType, registrationToken);
+        var authUrl = this.getOAuthUrl(oAuthPath, callbackUrl, oAuthWindowType, additionalData);
         if (oAuthWindowType === 'newWindow' ||
             (oAuthWindowType == 'inAppBrowser' && (!platform || !platform.is('cordova') || !(platform.is('ios') || platform.is('android'))))) {
             /** @type {?} */
@@ -563,7 +564,7 @@ var AngularTokenService = /** @class */ (function () {
      * @param {?} oAuthPath
      * @param {?} callbackUrl
      * @param {?} windowType
-     * @param {?=} registrationToken
+     * @param {?=} additionalData
      * @return {?}
      */
     AngularTokenService.prototype.getOAuthUrl = /**
@@ -571,17 +572,30 @@ var AngularTokenService = /** @class */ (function () {
      * @param {?} oAuthPath
      * @param {?} callbackUrl
      * @param {?} windowType
-     * @param {?=} registrationToken
+     * @param {?=} additionalData
      * @return {?}
      */
-    function (oAuthPath, callbackUrl, windowType, registrationToken) {
+    function (oAuthPath, callbackUrl, windowType, additionalData) {
+        var e_1, _a;
         /** @type {?} */
         var url;
         url = this.options.oAuthBase + "/" + oAuthPath;
         url += "?omniauth_window_type=" + windowType;
         url += "&auth_origin_url=" + encodeURIComponent(callbackUrl);
-        if (registrationToken) {
-            url += "&registration_token=" + registrationToken;
+        if (additionalData) {
+            try {
+                for (var _b = __values(Object.entries(additionalData)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var _d = __read(_c.value, 2), key = _d[0], value = _d[1];
+                    url += "&" + key + "=" + value;
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
         }
         if (this.userType.value != null) {
             url += "&resource_class=" + this.userType.value.name;

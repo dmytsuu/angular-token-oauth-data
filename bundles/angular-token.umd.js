@@ -11,6 +11,57 @@
     /** @type {?} */
     var ANGULAR_TOKEN_OPTIONS = new i0.InjectionToken('ANGULAR_TOKEN_OPTIONS');
 
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
+
+    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+    MERCHANTABLITY OR NON-INFRINGEMENT.
+
+    See the Apache Version 2.0 License for specific language governing permissions
+    and limitations under the License.
+    ***************************************************************************** */
+    function __values(o) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+        if (m)
+            return m.call(o);
+        return {
+            next: function () {
+                if (o && i >= o.length)
+                    o = void 0;
+                return { value: o && o[i++], done: !o };
+            }
+        };
+    }
+    function __read(o, n) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator];
+        if (!m)
+            return o;
+        var i = m.call(o), r, ar = [], e;
+        try {
+            while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+                ar.push(r.value);
+        }
+        catch (error) {
+            e = { error: error };
+        }
+        finally {
+            try {
+                if (r && !r.done && (m = i["return"]))
+                    m.call(i);
+            }
+            finally {
+                if (e)
+                    throw e.error;
+            }
+        }
+        return ar;
+    }
+
     /**
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
@@ -273,19 +324,19 @@
             };
         /**
          * @param {?} oAuthType
-         * @param {?=} registrationToken
+         * @param {?=} additionalData
          * @param {?=} inAppBrowser
          * @param {?=} platform
          * @return {?}
          */
         AngularTokenService.prototype.signInOAuth = /**
          * @param {?} oAuthType
-         * @param {?=} registrationToken
+         * @param {?=} additionalData
          * @param {?=} inAppBrowser
          * @param {?=} platform
          * @return {?}
          */
-            function (oAuthType, registrationToken, inAppBrowser, platform) {
+            function (oAuthType, additionalData, inAppBrowser, platform) {
                 var _this = this;
                 /** @type {?} */
                 var oAuthPath = this.getOAuthPath(oAuthType);
@@ -294,7 +345,7 @@
                 /** @type {?} */
                 var oAuthWindowType = this.options.oAuthWindowType;
                 /** @type {?} */
-                var authUrl = this.getOAuthUrl(oAuthPath, callbackUrl, oAuthWindowType, registrationToken);
+                var authUrl = this.getOAuthUrl(oAuthPath, callbackUrl, oAuthWindowType, additionalData);
                 if (oAuthWindowType === 'newWindow' ||
                     (oAuthWindowType == 'inAppBrowser' && (!platform || !platform.is('cordova') || !(platform.is('ios') || platform.is('android'))))) {
                     /** @type {?} */
@@ -556,7 +607,7 @@
          * @param {?} oAuthPath
          * @param {?} callbackUrl
          * @param {?} windowType
-         * @param {?=} registrationToken
+         * @param {?=} additionalData
          * @return {?}
          */
         AngularTokenService.prototype.getOAuthUrl = /**
@@ -564,17 +615,36 @@
          * @param {?} oAuthPath
          * @param {?} callbackUrl
          * @param {?} windowType
-         * @param {?=} registrationToken
+         * @param {?=} additionalData
          * @return {?}
          */
-            function (oAuthPath, callbackUrl, windowType, registrationToken) {
+            function (oAuthPath, callbackUrl, windowType, additionalData) {
+                var e_1, _a;
                 /** @type {?} */
                 var url;
                 url = this.options.oAuthBase + "/" + oAuthPath;
                 url += "?omniauth_window_type=" + windowType;
                 url += "&auth_origin_url=" + encodeURIComponent(callbackUrl);
-                if (registrationToken) {
-                    url += "&registration_token=" + registrationToken;
+                if (additionalData) {
+                    try {
+                        for (var _b = __values(Object.entries(additionalData)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                            var _d = __read(_c.value, 2), key = _d[0], value = _d[1];
+                            url += "&" + key + "=" + value;
+                        }
+                    }
+                    catch (e_1_1) {
+                        e_1 = { error: e_1_1 };
+                    }
+                    finally {
+                        try {
+                            if (_c && !_c.done && (_a = _b.return))
+                                _a.call(_b);
+                        }
+                        finally {
+                            if (e_1)
+                                throw e_1.error;
+                        }
+                    }
                 }
                 if (this.userType.value != null) {
                     url += "&resource_class=" + this.userType.value.name;

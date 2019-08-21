@@ -29,7 +29,7 @@ export declare class AngularTokenService implements CanActivate {
     registerAccount(registerData: RegisterData, additionalData?: any): Observable<ApiResponse>;
     deleteAccount(): Observable<ApiResponse>;
     signIn(signInData: SignInData, additionalData?: any): Observable<ApiResponse>;
-    signInOAuth(oAuthType: string, registrationToken?: string, inAppBrowser?: TokenInAppBrowser<any, any>, platform?: TokenPlatform): Observable<any>;
+    signInOAuth(oAuthType: string, additionalData?: any, inAppBrowser?: TokenInAppBrowser<any, any>, platform?: TokenPlatform): Observable<any>;
     processOAuthCallback(): void;
     signOut(): Observable<ApiResponse>;
     validateToken(): Observable<ApiResponse>;
