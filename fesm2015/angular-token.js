@@ -228,12 +228,12 @@ class AngularTokenService {
     }
     /**
      * @param {?} oAuthType
-     * @param {?=} registrationToken
+     * @param {?=} additionalData
      * @param {?=} inAppBrowser
      * @param {?=} platform
      * @return {?}
      */
-    signInOAuth(oAuthType, registrationToken, inAppBrowser, platform) {
+    signInOAuth(oAuthType, additionalData, inAppBrowser, platform) {
         /** @type {?} */
         const oAuthPath = this.getOAuthPath(oAuthType);
         /** @type {?} */
@@ -241,7 +241,7 @@ class AngularTokenService {
         /** @type {?} */
         const oAuthWindowType = this.options.oAuthWindowType;
         /** @type {?} */
-        const authUrl = this.getOAuthUrl(oAuthPath, callbackUrl, oAuthWindowType, registrationToken);
+        const authUrl = this.getOAuthUrl(oAuthPath, callbackUrl, oAuthWindowType, additionalData);
         if (oAuthWindowType === 'newWindow' ||
             (oAuthWindowType == 'inAppBrowser' && (!platform || !platform.is('cordova') || !(platform.is('ios') || platform.is('android'))))) {
             /** @type {?} */
@@ -446,17 +446,19 @@ class AngularTokenService {
      * @param {?} oAuthPath
      * @param {?} callbackUrl
      * @param {?} windowType
-     * @param {?=} registrationToken
+     * @param {?=} additionalData
      * @return {?}
      */
-    getOAuthUrl(oAuthPath, callbackUrl, windowType, registrationToken) {
+    getOAuthUrl(oAuthPath, callbackUrl, windowType, additionalData) {
         /** @type {?} */
         let url;
         url = `${this.options.oAuthBase}/${oAuthPath}`;
         url += `?omniauth_window_type=${windowType}`;
         url += `&auth_origin_url=${encodeURIComponent(callbackUrl)}`;
-        if (registrationToken) {
-            url += `&registration_token=${registrationToken}`;
+        if (additionalData) {
+            for (let [key, value] of Object.entries(additionalData)) {
+                url += `&${key}=${value}`;
+            }
         }
         if (this.userType.value != null) {
             url += `&resource_class=${this.userType.value.name}`;
